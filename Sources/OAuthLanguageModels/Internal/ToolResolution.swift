@@ -36,7 +36,7 @@ func resolveToolCalls(
     }
 
     let transcriptCalls = providerCalls.map {
-        Transcript.ToolCall(id: $0.id, toolName: $0.name, arguments: $0.arguments)
+        Transcript.ToolCall(id: toolCallTranscriptID(callID: $0.id, itemID: $0.itemID), toolName: $0.name, arguments: $0.arguments)
     }
 
     if let delegate = session.toolExecutionDelegate {
@@ -104,6 +104,23 @@ func resolveToolCalls(
     }
 
     return .invocations(results)
+}
+
+func toolCallTranscriptID(callID: String, itemID: String?) -> String {
+    guard let itemID, !itemID.isEmpty else { return callID }
+    return "codex-response-item:\(itemID):\(callID)"
+}
+
+func providerCallID(fromTranscriptID id: String) -> String {
+    guard id.hasPrefix("codex-response-item:") else { return id }
+    return String(id.split(separator: ":", maxSplits: 2, omittingEmptySubsequences: false).last ?? Substring(id))
+}
+
+func providerItemID(fromTranscriptID id: String) -> String? {
+    guard id.hasPrefix("codex-response-item:") else { return nil }
+    let parts = id.split(separator: ":", maxSplits: 2, omittingEmptySubsequences: false)
+    guard parts.count == 3, !parts[1].isEmpty else { return nil }
+    return String(parts[1])
 }
 
 private func callTool<T: Tool>(

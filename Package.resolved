@@ -1,13 +1,13 @@
 {
-  "originHash" : "656ce683fa06355199b16955fed9e9d9f72d535da8c6e4fef522f234158d9508",
+  "originHash" : "c479c1b34409457786d04fd0bdd098473d19c58067750a26b7f3701ffb1697d3",
   "pins" : [
     {
       "identity" : "anylanguagemodel",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/huggingface/AnyLanguageModel",
+      "location" : "https://github.com/finnvoor/AnyLanguageModel",
       "state" : {
-        "revision" : "163f3855a53235b4ebeb69cf5e9f228215ae35b5",
-        "version" : "0.8.0"
+        "branch" : "restore-instructions-from-transcript",
+        "revision" : "4b72d7ffe4a3749b9ab9042a85398ba2f671db7e"
       }
     },
     {

@@ -229,7 +229,7 @@ public struct CodexLanguageModel: LanguageModel {
     private static func makeFunctionCallOutput(for output: Transcript.ToolOutput) -> JSONValue {
         .object([
             "type": .string("function_call_output"),
-            "call_id": .string(output.id),
+            "call_id": .string(providerCallID(fromTranscriptID: output.id)),
             "output": .string(toolOutputString(output.segments))
         ])
     }
@@ -613,16 +613,19 @@ public struct CodexLanguageModel: LanguageModel {
             case let .toolCalls(toolCalls):
                 for call in toolCalls {
                     let arguments = try Self.encodedJSONString(for: call.arguments)
-                    let itemID = await state.itemID(for: call.id) ?? call.id
-                    input.append(
-                        .object([
-                            "id": .string(itemID),
-                            "type": .string("function_call"),
-                            "call_id": .string(call.id),
-                            "name": .string(call.toolName),
-                            "arguments": .string(arguments)
-                        ])
-                    )
+                    let callID = providerCallID(fromTranscriptID: call.id)
+                    let restoredItemID = providerItemID(fromTranscriptID: call.id)
+                    let rememberedItemID = restoredItemID == nil ? await state.itemID(for: callID) : nil
+                    var item: [String: JSONValue] = [
+                        "type": .string("function_call"),
+                        "call_id": .string(callID),
+                        "name": .string(call.toolName),
+                        "arguments": .string(arguments)
+                    ]
+                    if let itemID = restoredItemID ?? rememberedItemID {
+                        item["id"] = .string(itemID)
+                    }
+                    input.append(.object(item))
                 }
             case let .toolOutput(output):
                 input.append(Self.makeFunctionCallOutput(for: output))

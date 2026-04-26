@@ -19,7 +19,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/huggingface/AnyLanguageModel", from: "0.8.0")
+        .package(url: "https://github.com/finnvoor/AnyLanguageModel", branch: "restore-instructions-from-transcript")
     ],
     targets: [
         .target(
