@@ -11,7 +11,7 @@ import FoundationModels
 @available(macOS 27.0, iOS 27.0, visionOS 27.0, watchOS 27.0, *)
 @available(tvOS, unavailable) extension AnthropicOAuthLanguageModel: FoundationModels.LanguageModel {
     public var capabilities: LanguageModelCapabilities {
-        .init(capabilities: [.toolCalling, .vision])
+        .init([.toolCalling, .vision])
     }
 
     public var executorConfiguration: Executor.Configuration {
@@ -136,8 +136,6 @@ import FoundationModels
                     if case let .image(image) = attachment.content, let url = image.url {
                         return .image(.init(url: url.absoluteString))
                     }
-                    return nil
-                case .custom:
                     return nil
                 @unknown default:
                     return nil

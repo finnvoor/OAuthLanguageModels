@@ -11,7 +11,7 @@ import FoundationModels
 @available(macOS 27.0, iOS 27.0, visionOS 27.0, watchOS 27.0, *)
 @available(tvOS, unavailable) extension CodexLanguageModel: FoundationModels.LanguageModel {
     public var capabilities: LanguageModelCapabilities {
-        .init(capabilities: [.toolCalling, .reasoning])
+        .init([.toolCalling, .reasoning])
     }
 
     public var executorConfiguration: Executor.Configuration {
